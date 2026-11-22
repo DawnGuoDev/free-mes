@@ -66,6 +66,7 @@ spring:
   redis:
     host: ${REDIS_HOST:localhost} # 地址
     port: ${REDIS_PORT:6379} # 端口
+    username: ${REDIS_USERNAME:} # Redis 6+ ACL 用户名；无用户名时留空
     database: 1 # 数据库索引
     password: ${REDIS_PASSWORD:123456} # 密码，建议生产环境开启
 

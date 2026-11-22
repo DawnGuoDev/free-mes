@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  mes-server-api:
+    image: vestack-demo-cn-beijing.cr.volces.com/preset-images/free-mes-backend:20261122154047
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_HOST: ${MYSQL_HOST:?MYSQL_HOST is required}
+      MYSQL_PORT: ${MYSQL_PORT:-3306}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-mes-pro}
+      MYSQL_USERNAME: ${MYSQL_USERNAME:?MYSQL_USERNAME is required}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
+      REDIS_HOST: ${REDIS_HOST:?REDIS_HOST is required}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_USERNAME: ${REDIS_USERNAME:-}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+    ports:
+      - "48080:48080"
+
+  front:
+    image: vestack-demo-cn-beijing.cr.volces.com/preset-images/free-mes-frontend:20261122154047
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "48081:80"

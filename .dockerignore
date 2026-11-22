@@ -1,0 +1,10 @@
+.git
+.gitignore
+images
+source-code/new_open_mes_front
+source-code/metaxk-pro/**/target
+source-code/new_open_mes_server/**/target
+部署和文档/data
+**/node_modules
+**/dist
+**/.pnpm-store

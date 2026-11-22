@@ -27,6 +27,7 @@ services:
       --max_connections=1000
     networks:
       - mes-network
+
   redis:
     image: "redis:alpine"
     container_name: redis
@@ -39,38 +40,48 @@ services:
     networks:
       - mes-network
     command: redis-server --port 6379 --requirepass 123456  --appendonly yes
+
   minio:
     image: minio/minio:RELEASE.2022-06-25T15-50-16Z
     container_name: minio
     privileged: true
     restart: always
     ports:
-      - 9000:9000 # api 端口
-      - 9001:9001 # 控制台端口
+      - 9000:9000
+      - 9001:9001
     environment:
       TZ: Asia/Shanghai
       LANG: en_US.UTF-8
-      MINIO_ROOT_USER: admin    #管理后台用户名
-      MINIO_ROOT_PASSWORD: admin111 #管理后台密码，最小8个字符
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin111
     volumes:
-      - ./data/minio/data:/data               #映射当前目录下的data目录至容器内/data目录
-      - ./data/minio/config:/root/.minio/     #映射配置目录
-    command: server --console-address '0.0.0.0:9001' --address '0.0.0.0:9000' /data  #指定容器中的目录 /data
+      - ./data/minio/data:/data
+      - ./data/minio/config:/root/.minio/
+    command: server --console-address '0.0.0.0:9001' --address '0.0.0.0:9000' /data
     networks:
       - mes-network
+
   mes-server-api:
-    #需要修改镜像名称
     container_name: metaxk-mes-server
     build:
-      context: .
+      context: ..
+      dockerfile: 部署和文档/Dockerfile
     image: metaxk-mes-server
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      #- ./data/server/java.security:/opt/java/openjdk/jre/lib/security/java.security
+      - ./logs:/metaxk-mes-server/logs
     environment:
-      - TZ=Asia/Shanghai
+      TZ: Asia/Shanghai
+      MYSQL_HOST: db
+      MYSQL_PORT: "3306"
+      MYSQL_DATABASE: mes-pro
+      MYSQL_USERNAME: db_user
+      MYSQL_PASSWORD: db@123
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: "123456"
     ports:
       - 48080:48080
     depends_on:
@@ -79,8 +90,8 @@ services:
       - minio
     networks:
       - mes-network
+
   front:
-    #需要修改镜像名称
     container_name: metaxk-mes-front
     image: bitnami/nginx:latest
     restart: always
@@ -91,7 +102,7 @@ services:
       - ./data/front/conf/my_server_block.conf:/opt/bitnami/nginx/conf/server_blocks/my_server_block.conf:rw
       - ./data/front/dist:/app
     environment:
-      - TZ=Asia/Shanghai
+      TZ: Asia/Shanghai
     ports:
       - 48081:8080
     depends_on:

@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="FreeMES-Backend-API" verbose="1" parallel="false">
+  <test name="Backend API E2E">
+    <classes>
+      <class name="io.metaxk.e2e.backend.AuthApiE2ETest"/>
+      <class name="io.metaxk.e2e.backend.MesSpecApiE2ETest"/>
+    </classes>
+  </test>
+</suite>

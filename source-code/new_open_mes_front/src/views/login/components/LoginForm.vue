@@ -22,6 +22,7 @@
             v-model="loginData.loginForm.tenantName"
             :placeholder="t('login.tenantNamePlaceholder')"
             :prefix-icon="iconHouse"
+            data-testid="login-tenant"
           />
         </el-form-item>
       </el-col>
@@ -31,6 +32,7 @@
             v-model="loginData.loginForm.username"
             :placeholder="t('login.usernamePlaceholder')"
             :prefix-icon="iconAvatar"
+            data-testid="login-username"
           />
         </el-form-item>
       </el-col>
@@ -41,6 +43,7 @@
             type="password"
             :placeholder="t('login.passwordPlaceholder')"
             show-password
+            data-testid="login-password"
             @keyup.enter="getCode()"
             :prefix-icon="iconLock"
           />
@@ -68,6 +71,7 @@
           <XButton
             :loading="loginLoading"
             type="primary"
+            data-testid="login-submit"
             class="w-[100%]"
             :title="t('login.login')"
             @click="getCode()"
